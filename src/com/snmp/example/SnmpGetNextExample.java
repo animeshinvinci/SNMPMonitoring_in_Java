@@ -15,12 +15,12 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 public class SnmpGetNextExample
 {
-  private static String  ipAddress  = "127.0.0.1";
+  private static String  ipAddress  = "192.168.1.1";
 
   private static String  port    = "161";
 
   // sysDescr OID of MIB RFC 1213; Scalar Object = .iso.org.dod.internet.mgmt.mib-2.system.sysDescr
-  private static String  oidValue  = ".1.3.6.1.2.1.1.1.0";  // ends with 0 for scalar object
+  private static String  oidValue  = "1.3.6.1.2.1.2.2.1.1";  // ends with 0 for scalar object
 
   private static int    snmpVersion  = SnmpConstants.version1;
 

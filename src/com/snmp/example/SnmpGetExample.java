@@ -3,6 +3,7 @@ package com.snmp.example;
 import org.snmp4j.CommunityTarget;
 import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
+import org.snmp4j.util.TableEvent;
 import org.snmp4j.TransportMapping;
 import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.mp.SnmpConstants;
@@ -15,14 +16,15 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 public class SnmpGetExample
 {
-  private static String  ipAddress  = "72.163.166.108";
+  private static String  ipAddress  = "demo.snmplabs.com";
 
   private static String  port    = "161";
 
   // OID of MIB RFC 1213; Scalar Object = .iso.org.dod.internet.mgmt.mib-2.system.sysDescr.0
-  private static String  oidValue  = ".1.3.6.1.2.1.1.1.0";  // ends with 0 for scalar object
+ //private static String  oidValue  = ".1.3.6.1.2.1.1.5.0";  1.3.6.1.2.1.2.2.1 // ends with 0 for scalar object
+ private static String  oidValue  =  "1.3.6.1.2.1.2.2.1.1.2";
 
-  private static int    snmpVersion  = SnmpConstants.version1;
+  private static int    snmpVersion  = SnmpConstants.version2c;
 
   private static String  community  = "public";
 
@@ -46,15 +48,16 @@ public class SnmpGetExample
     PDU pdu = new PDU();
     
     pdu.add(new VariableBinding(new OID(oidValue)));
-    pdu.setType(PDU.GET);
+    pdu.setType(PDU.GETBULK);
     pdu.setRequestID(new Integer32(1));
 
     // Create Snmp object for sending data to Agent
     Snmp snmp = new Snmp(transport);
 
     System.out.println("Sending Request to Agent...");
+    //ResponseEvent response = snmp.get(pdu, comtarget);
     ResponseEvent response = snmp.get(pdu, comtarget);
-
+    System.out.println(response.getResponse().size());
     // Process Agent Response
     if (response != null)
     {
@@ -66,7 +69,7 @@ public class SnmpGetExample
         int errorStatus = responsePDU.getErrorStatus();
         int errorIndex = responsePDU.getErrorIndex();
         String errorStatusText = responsePDU.getErrorStatusText();
-
+        //responsePDU.getRequestID()
         if (errorStatus == PDU.noError)
         {
           System.out.println("Snmp Get Response = " + responsePDU.getVariableBindings());
